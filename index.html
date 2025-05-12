@@ -18,29 +18,33 @@
         /* Info Box - Top-left, slightly offset */
         .info-box {
             position: absolute;
-            top: 15px; 
-            left: 15px; 
+            top: 30px; 
+            left: 55px; 
             background: rgba(255, 255, 255, 0.92);
-            padding: 12px 15px;
+            padding: 0; 
             border-radius: 6px;
             z-index: 1000; 
             max-width: 320px;
             box-shadow: 0 1px 5px rgba(0,0,0,0.2);
             font-size: 0.875em;
-            line-height: 1.5;
         }
-        .info-box h4 {
-            margin-top: 0;
-            margin-bottom: 10px;
+        .info-box-header {
+            padding: 10px 15px;
             font-size: 1.1em;
             color: #2c3e50;
             border-bottom: 1px solid #e0e0e0;
-            padding-bottom: 8px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: bold;
         }
-        .info-box p {
-            margin-bottom: 6px;
-            color: #34495e;
-        }
+        .info-box-header:hover { background-color: #f9f9f9; }
+        .info-box-toggle-icon { font-size: 0.8em; margin-left: 5px; }
+        .info-box-content { padding: 0px 15px 12px 15px; line-height: 1.5; }
+        .info-box-content.collapsed { display: none; }
+        .info-box-content p { margin-bottom: 6px; color: #34495e; margin-top: 10px; }
+        .info-box-content p:first-child { margin-top: 8px; }
 
         .error-message-map { /* Standard error message styling */ }
         .server-notice { /* Standard server notice styling */ }
@@ -67,25 +71,12 @@
             justify-content: space-between;
             align-items: center;
         }
-        .layer-control-header:hover {
-            background-color: #f9f9f9;
-        }
-        .layer-control-toggle-icon {
-            font-size: 0.8em;
-            margin-left: 5px;
-        }
-        /* This div will host the actual Leaflet control's DOM */
-        .leaflet-control-layers-host { 
-             /* Styles for the host if needed, e.g., padding if header is separate */
-        }
-        .leaflet-control-layers-host.collapsed-control {
-            display: none;
-        }
-        /* Default Leaflet control styling adjustments if needed when nested */
+        .layer-control-header:hover { background-color: #f9f9f9; }
+        .layer-control-toggle-icon { font-size: 0.8em; margin-left: 5px; }
+        .leaflet-control-layers-host { /* Container for Leaflet's control DOM */ }
+        .leaflet-control-layers-host.collapsed-control { display: none; }
         .custom-layer-control-container .leaflet-control-layers { 
-            box-shadow: none; 
-            border-radius: 0 0 6px 6px; 
-            border-top: none; /* Remove top border if header provides one */
+            box-shadow: none; border-radius: 0 0 6px 6px; border-top: none; 
         }
         .leaflet-control-layers-expanded { padding: 8px 10px; }
         .leaflet-control-layers-list { line-height: 1.6; }
@@ -108,7 +99,7 @@
             box-shadow: 0 1px 7px rgba(0,0,0,0.25);
             font-size: 0.825em; 
             min-width: 160px; 
-            max-width: 220px; 
+            max-width: 240px; 
             z-index: 1000; 
         }
         .legend-header {
@@ -131,7 +122,7 @@
         }
         .legend-content {
             padding: 8px 12px; 
-            max-height: calc(100vh - 200px); 
+            max-height: calc(100vh - 220px); 
             overflow-y: auto;
         }
         .legend-content.collapsed {
@@ -152,7 +143,8 @@
             color: #555;
             display: block;
         }
-        .legend .legend-item { display: flex; align-items: center; margin-bottom: 4px; }
+        .legend .legend-item { display: flex; align-items: center; margin-bottom: 4px; justify-content: space-between;}
+        .legend .legend-item-main { display: flex; align-items: center; flex-grow: 1;}
         .legend i { 
             width: 16px; 
             height: 16px; 
@@ -169,61 +161,75 @@
         }
         .legend .legend-text { flex-grow: 1; line-height: 1.3; }
         .legend .arcgis-legend-item i { background-color: #eee; border: 1px dashed #999; }
+        .legend .zoom-to-layer-btn {
+            font-size: 0.9em; padding: 1px 4px; margin-left: 8px; cursor: pointer;
+            border: 1px solid #ccc; border-radius: 3px; background-color: #f0f0f0;
+            white-space: nowrap; 
+        }
+        .legend .zoom-to-layer-btn:hover { background-color: #e0e0e0; }
 
-        /* Town Label Styling */
-        .town-label {
-            background-color: transparent;
-            border: none;
-            box-shadow: none;
-            font-weight: bold;
-            font-size: 10px;
-            color: #222; 
+
+        /* Town/Pond Label Styling */
+        .town-label, .pond-label {
+            background-color: transparent; border: none; box-shadow: none;
+            font-weight: bold; color: #222; 
             text-shadow: 1px 1px 2px white, -1px -1px 2px white, 1px -1px 2px white, -1px 1px 2px white; 
         }
-        /* Pond Label Styling */
-        .pond-label {
-            background-color: transparent;
-            border: none;
-            box-shadow: none;
+        .town-label { font-size: 10px; }
+        .pond-label { 
+            font-size: 11px; 
             font-weight: 500; 
-            font-size: 10.5px; 
-            color: #1A5276; 
-            text-shadow: 1px 1px 1px white, -1px -1px 1px white, 1px -1px 1px white, -1px 1px 1px white;
+            color: #004C6D; 
+            text-shadow: 1px 1px 1px #fff, -1px -1px 1px #fff, 1px -1px 1px #fff, -1px 1px 1px #fff, 0 0 3px #fff; 
         }
-         /* PolylineMeasure Control Styling */
-        .leaflet-control.polyline-measure-control { 
-            margin-left: 10px !important; 
-            margin-bottom: 10px !important; 
+        
+        /* PolylineMeasure Control Styling */
+        .leaflet-control.polyline-measure-control { margin-left: 10px !important; margin-bottom: 10px !important; }
+        .polyline-measure-control { border-radius: 4px !important; }
+
+        /* Global Loading Indicator */
+        #map-loader {
+            position: absolute; top: 10px; left: 50%; transform: translateX(-50%);
+            z-index: 2000; background-color: rgba(255, 255, 255, 0.8);
+            padding: 5px 10px; border-radius: 4px; box-shadow: 0 0 10px rgba(0,0,0,0.2);
+            display: none; 
         }
-        .polyline-measure-control { 
-            border-radius: 4px !important;
+        .spinner {
+            border: 3px solid #f3f3f3; border-top: 3px solid #3498db; 
+            border-radius: 50%; width: 16px; height: 16px;
+            animation: spin 1s linear infinite; display: inline-block; margin-right: 5px;
         }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
     </style>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
 </head>
 <body>
     <div id="server-notice-container"></div>
     <div id="map"></div>
-    <div class="info-box">
-        <h4>Environmental Analysis Map</h4>
-        <p>Suffolk County, NY</p>
-        <p>Explore various environmental and demographic datasets. Use the layer control (top right) to toggle layers and switch basemaps.</p>
+    <div id="map-loader"><div class="spinner"></div>Loading...</div>
+
+    <div class="info-box" id="mapInfoBox">
+        <div class="info-box-header" id="infoBoxHeader">
+            Environmental Analysis Map <span class="info-box-toggle-icon">▼</span>
+        </div>
+        <div class="info-box-content" id="infoBoxContent">
+            <p>Suffolk County, NY</p>
+            <p>Explore various environmental and demographic datasets. Use the layer control (top right) to toggle layers and switch basemaps.</p>
+        </div>
     </div>
     
     <div id="customLayerControl" class="custom-layer-control-container">
         <div class="layer-control-header">
             Layers <span class="layer-control-toggle-icon">▼</span>
         </div>
-        <div class="leaflet-control-layers-host collapsed-control">
-            </div>
+        <div class="leaflet-control-layers-host collapsed-control"></div>
     </div>
-
 
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
     <script src="https://unpkg.com/esri-leaflet@3.0.10/dist/esri-leaflet.js" integrity="sha512-i9mZ/0lnBMdKZjkVQXImtZbWzrhomyyQzXarfT4ki1eD/Bi+rcV4lFyzX52lbRQtqj070JQea4p8QNCMrHzuYg==" crossorigin=""></script>
     <script src='https://unpkg.com/@turf/turf@6/turf.min.js'></script>
     <script src="https://unpkg.com/leaflet-polylinemeasure@2.1.0/Leaflet.PolylineMeasure.js"></script>
-
 
     <script>
         console.log("Map script started.");
@@ -233,49 +239,28 @@
         if (typeof L === 'undefined') { /* Leaflet load check */ }
         else {
             console.log("Leaflet library (L) loaded.");
-            if (typeof turf === 'undefined') { 
-                console.error("Turf.js library not loaded. Buffering will not work.");
-            } else {
-                console.log("Turf.js library loaded.");
-            }
-             if (typeof L.control.polylineMeasure === 'undefined') {
-                console.error("Leaflet.PolylineMeasure library not loaded. Measurement tool will not work.");
-            } else {
-                console.log("Leaflet.PolylineMeasure library loaded.");
-            }
-
+            if (typeof turf === 'undefined') { console.error("Turf.js library not loaded."); } 
+            else { console.log("Turf.js library loaded."); }
+            if (typeof L.control.polylineMeasure === 'undefined') { console.error("Leaflet.PolylineMeasure library not loaded."); } 
+            else { console.log("Leaflet.PolylineMeasure library loaded."); }
 
             const mapElement = document.getElementById('map');
             if (!mapElement) { console.error("Map container element with ID 'map' not found."); }
-            else { console.log("Map container element #map found."); }
 
             const osm = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors', zIndex: 1 });
             const stamenTerrainBackground = L.tileLayer('https://tiles.stadiamaps.com/tiles/stamen_terrain_background/{z}/{x}/{y}{r}.png', { attribution: '&copy; <a href="https://www.stadiamaps.com/" target="_blank">Stadia Maps</a> &copy; <a href="https://www.stamen.com/" target="_blank">Stamen Design</a> &copy; <a href="https://openmaptiles.org/" target="_blank">OpenMapTiles</a> &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors', zIndex: 1 });
             const esriWorldImagery = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', { attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community', zIndex: 1 });
-            const esriHillshade = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Shaded_Relief/MapServer/tile/{z}/{y}/{x}', {
-	            attribution: 'Tiles &copy; Esri &mdash; Source: Esri',
-	            maxZoom: 13, 
-                zIndex: 1
-            });
+            const esriHillshade = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Shaded_Relief/MapServer/tile/{z}/{y}/{x}', { attribution: 'Tiles &copy; Esri &mdash; Source: Esri', maxZoom: 13, zIndex: 1 });
             
             const map = L.map('map', { layers: [esriHillshade] }).setView([40.9, -72.9], 10);
-            console.log("Leaflet map object initialized with Esri Hillshade basemap.");
+            console.log("Leaflet map object initialized.");
             L.control.scale({position: 'bottomleft', metric: true, imperial: false}).addTo(map);
 
             if (typeof L.control.polylineMeasure !== 'undefined') {
-                const polylineMeasure = L.control.polylineMeasure({
-                    position: 'bottomleft', 
-                    unit: 'kilometres', 
-                    showBearings: false, 
-                    clearMeasurementsOnStop: false,
-                    showClearControl: true,
-                    showUnitControl: true, 
-                    measureControlTitle: 'Measure distance (km)' 
-                });
+                const polylineMeasure = L.control.polylineMeasure({ position: 'bottomleft', unit: 'kilometres', showBearings: false, clearMeasurementsOnStop: false, showClearControl: true, showUnitControl: true, measureControlTitle: 'Measure distance (km)' });
                 polylineMeasure.addTo(map);
                 console.log("PolylineMeasure control added.");
             }
-
 
             map.createPane('vectorOverlaysPane'); map.getPane('vectorOverlaysPane').style.zIndex = 420;
             map.createPane('populationDensityPane'); map.getPane('populationDensityPane').style.zIndex = 425;
@@ -285,45 +270,42 @@
 
             let femaLayer, coastalRiskLayer, landUse2016ServiceLayer; 
             const landUseServiceUrl = 'https://gis.suffolkcountyny.gov/image/rest/services/Basemaps/LandUse2016/MapServer';
+            
+            let loadingOperations = 0;
+            const mapLoader = document.getElementById('map-loader');
+            function showLoader() {
+                loadingOperations++;
+                if (mapLoader) mapLoader.style.display = 'block';
+            }
+            function hideLoader() {
+                loadingOperations--;
+                if (loadingOperations <= 0) {
+                    if (mapLoader) mapLoader.style.display = 'none';
+                    loadingOperations = 0; 
+                }
+            }
 
             if (typeof L.esri === 'undefined') { /* Esri Leaflet load check */ }
             else { 
                 console.log("Esri Leaflet library (L.esri) loaded.");
-                const esriErrorDiv = document.getElementById('esriLoadError');
-                if (esriErrorDiv) esriErrorDiv.remove();
                 
                 const arcgisImageServerUrl = 'https://elevation.its.ny.gov/arcgis/rest/services/FEMA_Suffolk2006_2_meter/ImageServer';
                 femaLayer = L.esri.imageMapLayer({ url: arcgisImageServerUrl, opacity: 0.70, attribution: 'NYS ITS, FEMA', zIndex: 2 }); 
-                femaLayer.on('load', () => console.log('FEMA Elevation layer defined.'));
-                femaLayer.on('error', (e) => console.error('Error defining FEMA Elevation layer:', e));
+                femaLayer.on('loading', showLoader).on('load', hideLoader).on('error', hideLoader);
 
                 const coastalRiskUrl = 'https://tiles.arcgis.com/tiles/okXm0pb6aWH6XOGI/arcgis/rest/services/Coastal_Risk_Areas_Downstate_NY/MapServer';
                 coastalRiskLayer = L.esri.tiledMapLayer({ url: coastalRiskUrl, opacity: 0.65, attribution: 'NYS DEC, NOAA, USACE, FEMA', zIndex: 3 }); 
-                coastalRiskLayer.on('load', () => console.log('Coastal Risk Areas layer defined.'));
-                coastalRiskLayer.on('error', (e) => console.error('Error defining Coastal Risk Areas layer:', e));
-
-                landUse2016ServiceLayer = L.esri.dynamicMapLayer({
-                    url: landUseServiceUrl,
-                    layers: [0], 
-                    opacity: 0.7,
-                    attribution: 'Suffolk County GIS',
-                    pane: 'landUseServicePane' 
-                }); 
-                landUse2016ServiceLayer.on('load', () => console.log('Land Use 2016 Service layer defined.'));
-                landUse2016ServiceLayer.on('error', (e) => console.error('Error defining Land Use 2016 Service layer:', e));
+                coastalRiskLayer.on('loading', showLoader).on('load', hideLoader).on('error', hideLoader);
+                
+                landUse2016ServiceLayer = L.esri.dynamicMapLayer({ url: landUseServiceUrl, layers: [0], opacity: 0.7, attribution: 'Suffolk County GIS', pane: 'landUseServicePane' }); 
+                landUse2016ServiceLayer.on('loading', showLoader).on('load', hideLoader).on('error', hideLoader);
             }
 
-            const baseMaps = { 
-                "Hillshade": esriHillshade, 
-                "Terrain Background": stamenTerrainBackground, 
-                "Satellite Imagery": esriWorldImagery, 
-                "OpenStreetMap": osm 
-            };
+            const baseMaps = { "Hillshade": esriHillshade, "Terrain Background": stamenTerrainBackground, "Satellite Imagery": esriWorldImagery, "OpenStreetMap": osm };
             const overlayMaps = {}; 
             if (femaLayer) { overlayMaps["FEMA Elevation (2006 DEM)"] = femaLayer; }
             if (coastalRiskLayer) { overlayMaps["Coastal Risk Areas"] = coastalRiskLayer; }
             if (landUse2016ServiceLayer) { overlayMaps["Land Use (2016 Service)"] = landUse2016ServiceLayer; }
-
 
             const POPDENSITY_PROPERTY = 'POPDENSITY'; 
             function getDensityColor(density) { 
@@ -336,22 +318,19 @@
             const densityGrades = [0, 50, 200, 500, 1000, 2500, 5000];
 
             const POND_BUFFER_DISTANCE = 1.5; 
-            const POND_BUFFER_STYLE = { fillColor: "#76D7C4", color: "#48C9B0", weight: 1.5, fillOpacity: 0.35 };
-            const POND_NAMES_FOR_BUFFERING_AND_LABELS = ["Mill Pond", "Stump Pond"]; 
-
+            const POND_BUFFER_STYLE = { fillColor: "#56B4E9", color: "#0072B2", weight: 2.5, fillOpacity: 0 };
+            // UPDATED: Renamed pond layers
+            const POND_NAMES_FOR_BUFFERING_AND_LABELS = ["Mill Pond Dam", "Stump Pond Dam"]; 
+            const HIGHLIGHT_STYLE = { weight: 3, color: '#FFD700', dashArray: '', fillOpacity: 0.5 }; 
 
             function styleGeoJson(feature, layer, layerName, layerColor) {
-                let style = { weight: 1.5, opacity: 0.9, fillOpacity: 0.70 };
+                let style = { weight: 1.5, opacity: 0.9, fillOpacity: 0.70 }; 
 
                 if (layerName === "Population Density") {
                     const density = feature.properties[POPDENSITY_PROPERTY];
-                    style.fillColor = getDensityColor(density); 
-                    style.color = "#444"; 
-                    style.weight = 0.6; 
+                    style.fillColor = getDensityColor(density); style.color = "#444"; style.weight = 0.6; 
                 } else if (layerName === "Towns") {
-                    style.color = layerColor; 
-                    style.fillOpacity = 0; 
-                    style.weight = 2.2; 
+                    style.color = layerColor; style.fillOpacity = 0; style.weight = 2.2; 
                 } else if (POND_NAMES_FOR_BUFFERING_AND_LABELS.includes(layerName)) { 
                     style.color = layerColor; style.fillColor = layerColor; style.fillOpacity = 0.65; 
                 } else if (layerName.endsWith(" Buffer")) { 
@@ -359,71 +338,65 @@
                 } else { 
                     style.color = layerColor; style.fillColor = layerColor; style.fillOpacity = 0.55;
                 }
-
+                
                 if (feature.properties && layer) { 
                     let popupContent = ''; let title = 'Feature Details';
                     let labelText = null; 
 
                     if (layerName === "Towns" && feature.properties.LABEL) {
-                        title = String(feature.properties.LABEL);
-                        labelText = title; 
+                        title = String(feature.properties.LABEL); labelText = title; 
                     } else if (POND_NAMES_FOR_BUFFERING_AND_LABELS.includes(layerName)) {
-                        labelText = layerName;
-                        title = layerName; 
+                        labelText = layerName; // Use the new layer name for the label
+                        title = layerName; // Default title to the new layer name
                         const pondNameProperties = ['name', 'POND_NAME', 'FEATURE_NA', 'LABEL'];
-                        for (const prop of pondNameProperties) {
-                            if (feature.properties[prop]) {
-                                title = String(feature.properties[prop]); 
-                                break;
-                            }
-                        }
-                    }
-                     else { 
+                        for (const prop of pondNameProperties) { if (feature.properties[prop]) { title = String(feature.properties[prop]); break; } }
+                    } else { 
                         const nameProperties = ['name', 'Name', 'NAME', 'TOWN', 'TRACT_NAME', 'WATERSHED_NAME', 'FEATURE_NA'];
                         for (const prop of nameProperties) { if (feature.properties[prop]) { title = String(feature.properties[prop]); break; } }
                     }
                     popupContent += `<strong>${title}</strong>`;
                     for (const key in feature.properties) {
-                        if (Object.hasOwnProperty.call(feature.properties, key) && 
-                            String(feature.properties[key]) !== title && 
+                        if (Object.hasOwnProperty.call(feature.properties, key) && String(feature.properties[key]) !== title && 
                             !(key === 'LABEL' && layerName === "Towns") &&
-                            !(POND_NAMES_FOR_BUFFERING_AND_LABELS.includes(layerName) && (key === 'name' || key === 'POND_NAME' || key === 'FEATURE_NA' || key === 'LABEL' )) 
-                            ) {
+                            !(POND_NAMES_FOR_BUFFERING_AND_LABELS.includes(layerName) && (key === 'name' || key === 'POND_NAME' || key === 'FEATURE_NA' || key === 'LABEL' ))) {
                              popupContent += `<em>${key}:</em> ${feature.properties[key]}<br>`;
                         }
                     }
                     layer.bindPopup(popupContent.slice(0, -4));
 
                     if (labelText) { 
-                        let tooltipClassName = '';
-                        if (layerName === "Towns") {
-                            tooltipClassName = 'town-label';
-                        } else if (POND_NAMES_FOR_BUFFERING_AND_LABELS.includes(layerName)) {
-                            tooltipClassName = 'pond-label';
-                        }
-                        if (tooltipClassName) {
-                            layer.bindTooltip(labelText, { 
-                                permanent: true, 
-                                direction: 'center', 
-                                className: tooltipClassName, 
-                                opacity: 0.85 
-                            });
-                        }
+                        let tooltipClassName = (layerName === "Towns") ? 'town-label' : (POND_NAMES_FOR_BUFFERING_AND_LABELS.includes(layerName) ? 'pond-label' : '');
+                        if (tooltipClassName) { layer.bindTooltip(labelText, { permanent: true, direction: 'center', className: tooltipClassName, opacity: 0.85 }); }
                     }
+                    
+                    layer.on({
+                        mouseover: function (e) {
+                            const targetLayer = e.target;
+                            targetLayer.setStyle(HIGHLIGHT_STYLE);
+                            if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {
+                                targetLayer.bringToFront(); 
+                            }
+                        },
+                        mouseout: function (e) {
+                            e.target.setStyle(styleGeoJson(e.target.feature, null, layerName, layerColor));
+                        }
+                    });
                 }
                 if (feature.geometry && feature.geometry.type === "Point") { return { radius: 6, fillColor: layerColor || "#ff7800", color: "#000", weight: 1, opacity: 1, fillOpacity: 0.8 }; }
                 return style;
             }
             
+            // UPDATED: Renamed pond layers in geoJsonFiles
             const geoJsonFiles = [ 
                 { name: "Population Density", path: "data/Census_Tracts.geojson", color: null, pane: 'populationDensityPane', onByDefault: true }, 
                 { name: "Towns", path: "data/Towns.geojson", color: "#000000", pane: 'vectorOverlaysPane' },
-                { name: "Mill Pond", path: "data/Mill_Pond.geojson", color: "#6a3d9a", pane: 'pondsPane' }, 
-                { name: "Stump Pond", path: "data/Stump_Pond.geojson", color: "#ff7f00", pane: 'pondsPane' }, 
+                { name: "Mill Pond Dam", path: "data/Mill_Pond.geojson", color: "#6a3d9a", pane: 'pondsPane' }, 
+                { name: "Stump Pond Dam", path: "data/Stump_Pond.geojson", color: "#ff7f00", pane: 'pondsPane' }, 
                 { name: "Watersheds", path: "data/Watersheds.geojson", color: "#b3de69", pane: 'vectorOverlaysPane' }
             ];
 
             async function addGeoJsonLayer(mapInstance, layerName, filePath, layerColor, targetPane, onByDefault = false) {
+                showLoader(); 
                 console.log(`Attempting to load GeoJSON: ${layerName} from ${filePath}`);
                 try {
                     const response = await fetch(filePath);
@@ -432,16 +405,14 @@
                     console.log(`Successfully parsed JSON for ${layerName}`);
                     
                     const layerOptions = {
-                        style: (feature) => styleGeoJson(feature, null, layerName, layerColor),
-                        onEachFeature: (feature, layer) => { styleGeoJson(feature, layer, layerName, layerColor); },
+                        style: (feature) => styleGeoJson(feature, null, layerName, layerColor), 
+                        onEachFeature: (feature, layer) => { styleGeoJson(feature, layer, layerName, layerColor); }, 
                         pointToLayer: (feature, latlng) => L.circleMarker(latlng, { radius: 6, fillColor: layerColor || "#ff7800", color: "#000", weight: 1, opacity: 1, fillOpacity: 0.8 }),
                         pane: targetPane 
                     };
 
                     const geoJsonLayer = L.geoJSON(geoJsonData, layerOptions);
-                    if (onByDefault) { 
-                        geoJsonLayer.addTo(mapInstance);
-                    }
+                    if (onByDefault) { geoJsonLayer.addTo(mapInstance); }
                     overlayMaps[layerName] = geoJsonLayer; 
                     console.log(`${layerName} added to pane: ${targetPane}. On by default: ${onByDefault}`);
 
@@ -459,12 +430,12 @@
                                 style: (feature) => styleGeoJson(feature, null, bufferLayerName, null), 
                                 pane: 'pondBuffersPane' 
                             });
-                            overlayMaps[bufferLayerName] = bufferLayer; // Add to overlayMaps for layer control
-                            console.log(`${bufferLayerName} created and added to pane: pondBuffersPane. Off by default.`);
+                            overlayMaps[bufferLayerName] = bufferLayer; 
+                            console.log(`${bufferLayerName} created. Off by default.`);
                         }
                     }
-
                 } catch (error) { console.error(`Error loading ${layerName}: ${error.message}`); }
+                finally { hideLoader(); } 
             }
 
             const legend = L.control({position: 'bottomright'});
@@ -477,11 +448,13 @@
                 content.innerHTML += '<h4>Population Density</h4><span class="legend-subtitle">(people / km²)</span>';
                 for (let i = 0; i < densityGrades.length; i++) {
                     const from = densityGrades[i]; const to = densityGrades[i + 1];
-                    content.innerHTML += `<div class="legend-item"><i style="background:${getDensityColor(from + (from === 0 ? 0 : 1))}"></i><span class="legend-text">${from + (to ? '&ndash;' + to : '+')}</span></div>`;
+                    content.innerHTML += `<div class="legend-item"><i style="background:${getDensityColor(from + (from === 0 ? 0 : 1))}"></i><span class="legend-text">${from + (to ? '&ndash;' + to : '+')}</span><button class="zoom-to-layer-btn" data-layername="Population Density">Zoom</button></div>`;
                 }
 
                 content.innerHTML += '<h4>Vector Layers</h4>';
                 geoJsonFiles.forEach(function(file) { 
+                    if (file.name === "Population Density") return; 
+
                     let legendStyle = `background:${file.color}; opacity: 0.55;`; 
                     let legendText = file.name;
                     if (file.name === "Towns") {
@@ -491,32 +464,41 @@
                          legendStyle = `background:${file.color}; opacity: 0.65;`; 
                     }
                     
-                    if (file.name !== "Population Density" && file.color) { 
-                        content.innerHTML += `<div class="legend-item"><i style="${legendStyle}"></i><span class="legend-text">${legendText}</span></div>`;
+                    content.innerHTML += `<div class="legend-item"><div class="legend-item-main"><i style="${legendStyle}"></i><span class="legend-text">${legendText}</span></div><button class="zoom-to-layer-btn" data-layername="${file.name}">Zoom</button></div>`;
+                    
+                    if (POND_NAMES_FOR_BUFFERING_AND_LABELS.includes(file.name)) {
+                        const bufferLayerName = `${file.name} Buffer`;
+                        const bufferLegendStyle = `background: transparent; border: 2.5px solid ${POND_BUFFER_STYLE.color}; opacity:1;`;
+                        content.innerHTML += `<div class="legend-item"><div class="legend-item-main"><i style="${bufferLegendStyle}"></i><span class="legend-text">${bufferLayerName}</span></div><button class="zoom-to-layer-btn" data-layername="${bufferLayerName}">Zoom</button></div>`;
                     }
                 });
-                 if (overlayMaps["Mill Pond Buffer"]) {
-                    content.innerHTML += `<div class="legend-item"><i style="background:${POND_BUFFER_STYLE.fillColor}; border: 1.5px solid ${POND_BUFFER_STYLE.color}; opacity:${POND_BUFFER_STYLE.fillOpacity};"></i><span class="legend-text">Mill Pond Buffer</span></div>`;
-                }
-                if (overlayMaps["Stump Pond Buffer"]) {
-                    content.innerHTML += `<div class="legend-item"><i style="background:${POND_BUFFER_STYLE.fillColor}; border: 1.5px solid ${POND_BUFFER_STYLE.color}; opacity:${POND_BUFFER_STYLE.fillOpacity};"></i><span class="legend-text">Stump Pond Buffer</span></div>`;
-                }
-
 
                 content.innerHTML += '<h4>Service Layers</h4>';
                 if (femaLayer) { content.innerHTML += '<div class="legend-item"><i class="arcgis-legend-item"></i><span class="legend-text">FEMA Elevation (DEM)</span></div>'; }
                 if (coastalRiskLayer) { content.innerHTML += '<div class="legend-item"><i class="arcgis-legend-item"></i><span class="legend-text">Coastal Risk Areas</span></div>'; }
                 if (landUse2016ServiceLayer) {
-                    content.innerHTML += '<div id="landUseLegendDiv"><h4>Land Use (2016 Service)</h4><span class="legend-subtitle">Loading legend...</span></div>';
+                    content.innerHTML += '<div id="landUseLegendDiv"><h4>Land Use (2016 Service)</h4><span class="legend-subtitle">Loading Land Use Legend...</span></div>';
                 }
                 
-                L.DomEvent.on(header, 'click', function() {
+                L.DomEvent.on(header, 'click', function() { /* Toggle legend content */
                     if (L.DomUtil.hasClass(content, 'collapsed')) {
                         L.DomUtil.removeClass(content, 'collapsed');
                         header.querySelector('.legend-toggle-icon').innerHTML = '▼';
                     } else {
                         L.DomUtil.addClass(content, 'collapsed');
                         header.querySelector('.legend-toggle-icon').innerHTML = '▶';
+                    }
+                });
+                L.DomEvent.on(content, 'click', function(ev) { /* Zoom to layer */
+                    const target = ev.target || ev.srcElement; 
+                    if (L.DomUtil.hasClass(target, 'zoom-to-layer-btn')) {
+                        const layerName = target.getAttribute('data-layername');
+                        if (layerName && overlayMaps[layerName]) {
+                            const layerToZoom = overlayMaps[layerName];
+                            if (typeof layerToZoom.getBounds === 'function' && Object.keys(layerToZoom.getBounds()).length > 0 ) { 
+                                try { map.fitBounds(layerToZoom.getBounds()); } catch (e) { console.error("Error fitting bounds for " + layerName, e, layerToZoom.getBounds());}
+                            } else { console.warn(`Layer ${layerName} does not have valid bounds or getBounds method.`); }
+                        }
                     }
                 });
                 return container;
@@ -540,7 +522,7 @@
                                               <span class="legend-text">${item.label}</span>
                                            </div>`;
                         });
-                    } else { htmlContent += '<span class="legend-subtitle">Legend not available.</span>'; }
+                    } else { htmlContent += '<span class="legend-subtitle">Legend data not found.</span>'; } 
                     landUseLegendDiv.innerHTML = htmlContent;
                     console.log("Land Use legend populated.");
                 } catch (error) {
@@ -558,25 +540,16 @@
                 await Promise.allSettled(loadPromises); 
                 console.log("All GeoJSON loading attempts finished.");
 
-                // Build the Leaflet layer control
-                const layerControl = L.control.layers(baseMaps, overlayMaps, { 
-                    collapsed: true // The Leaflet control itself can be collapsed if you prefer its default toggle
-                }); 
-                
-                // Add to custom container and set up toggle
+                const layerControl = L.control.layers(baseMaps, overlayMaps, { collapsed: true }); 
                 const customLayerControlContainer = L.DomUtil.get('customLayerControl');
                 const layerControlHeader = customLayerControlContainer.querySelector('.layer-control-header');
                 const layerControlToggleIcon = layerControlHeader.querySelector('.layer-control-toggle-icon');
                 const layerControlHost = customLayerControlContainer.querySelector('.leaflet-control-layers-host');
                 
                 if (customLayerControlContainer && layerControlHeader && layerControlHost) {
-                    // Add Leaflet's control to the map first to ensure it's fully initialized
-                    layerControl.addTo(map);
-                    // Then move its DOM container into our custom host
-                    layerControlHost.appendChild(layerControl.getContainer());
-
-                    // Initial state for custom toggle (already handled by collapsed-control class on host)
-                    // layerControlToggleIcon.innerHTML = '▶'; // Host starts with collapsed-control
+                    layerControl.addTo(map); 
+                    layerControlHost.appendChild(layerControl.getContainer()); 
+                    layerControlToggleIcon.innerHTML = '▶'; 
 
                     L.DomEvent.on(layerControlHeader, 'click', function() {
                         if (L.DomUtil.hasClass(layerControlHost, 'collapsed-control')) {
@@ -588,8 +561,8 @@
                         }
                     });
                 } else {
-                    console.error("Custom layer control container or its parts not found. Using default Leaflet layer control.");
-                    L.control.layers(baseMaps, overlayMaps, { collapsed: false, position: 'topright' }).addTo(map); // Fallback
+                    console.error("Custom layer control container parts not found. Using default Leaflet layer control.");
+                    L.control.layers(baseMaps, overlayMaps, { collapsed: false, position: 'topright' }).addTo(map); 
                 }
                 
                 console.log("Layer control added/updated.");
@@ -597,27 +570,24 @@
                 console.log("Main legend structure added.");
 
                 if (landUse2016ServiceLayer) { addLandUseLegend(landUseServiceUrl, 0); }
+
+                const infoBoxHeader = document.getElementById('infoBoxHeader');
+                const infoBoxContent = document.getElementById('infoBoxContent');
+                const infoBoxToggleIcon = infoBoxHeader.querySelector('.info-box-toggle-icon');
+                if (infoBoxHeader && infoBoxContent && infoBoxToggleIcon) {
+                    L.DomEvent.on(infoBoxHeader, 'click', function() { 
+                        if (L.DomUtil.hasClass(infoBoxContent, 'collapsed')) {
+                            L.DomUtil.removeClass(infoBoxContent, 'collapsed');
+                            infoBoxToggleIcon.innerHTML = '▼';
+                        } else {
+                            L.DomUtil.addClass(infoBoxContent, 'collapsed');
+                            infoBoxToggleIcon.innerHTML = '▶';
+                        }
+                    });
+                }
             }
             loadAllGeoJsonAndInitControl();
         }
     </script>
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
